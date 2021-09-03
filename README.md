@@ -13,3 +13,7 @@ Scroll down until you find the Custom Post Process Orders section. Add VIOSOWarp
 
 Now You should be able to see the shader in play mode, as usual keep an eye on VIOSOWarpBlend.log file to monitor errors.
 - More info about VIOSO/Unity Integration: https://helpdesk.vioso.com/documentation/integrate-3d-engines/unity/
+- Note: for better synchronisation of effects (shadows/lighting..etc) between displays, you can work in a single view warping mode by using a 2D .vwf export.
+- 
+# Limitation
+- Please note that some of Unity's post processing effects like bloom, motion blur..etc are not properply synced in multi-display mode.
