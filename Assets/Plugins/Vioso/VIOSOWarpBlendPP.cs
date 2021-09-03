@@ -28,7 +28,7 @@ public sealed class VIOSOWarpBlendPP : CustomPostProcessVolumeComponent, IPostPr
 
     public override void Setup()
     {
-        Debug.Log("VIOSOWarpBlendPP.Setup() begin");
+       // Debug.Log("VIOSOWarpBlendPP.Setup() begin");
         if (Shader.Find(kShaderName) == null)
             Debug.LogError($"Unable to find shader '{kShaderName}'. Post Process Volume viosoPostProcessVolume is unable to load.");
 

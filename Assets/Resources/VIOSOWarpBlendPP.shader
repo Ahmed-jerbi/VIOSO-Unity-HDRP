@@ -88,10 +88,9 @@ Shader "Hidden/Shader/VIOSOWarpBlendPP"
     float4 CustomPostProcess(Varyings input) : SV_Target
     {
         UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
-
-        float2 tx = input.texcoord * mapSize.xy;
-
-        float4 tex   = LOAD_TEXTURE2D( _texWarp,  tx );
+        float2 tx = input.texcoord.xy * mapSize.xy;
+        tx.y = mapSize.y - tx.y;
+        float4 tex   = LOAD_TEXTURE2D( _texWarp, tx );
         float4 blend = LOAD_TEXTURE2D( _texBlend, tx );
         float4 black = LOAD_TEXTURE2D( _texBlack, tx ) * blackBias.x;
         float4 vOut  = float4( 0,0,0,1 );
@@ -113,7 +112,9 @@ Shader "Hidden/Shader/VIOSOWarpBlendPP"
                 tex.y /= -2;
                 tex.xy += 0.5;
             }
-            tex.xy = ( tex.xy - offsScale.xy ) * offsScale.zw * _ScreenSize.xy;
+            tex.xy =  ( tex.xy - offsScale.xy ) * offsScale.zw * _ScreenSize.xy;
+            tex.y = _ScreenSize.y - tex.y;
+            
             if( 0.5 < bBorder.w ) // bicubic
             {
                 vOut = tex2DBC( _texContent, tex.xy );
@@ -123,7 +124,7 @@ Shader "Hidden/Shader/VIOSOWarpBlendPP"
                 vOut = tex2DLin( _texContent, tex.xy );
             }
             if( 0.5 < bBorder.y ) // blend
-               vOut.rgb *= blend.rgb;
+               vOut.rgb *= pow( blend.rgb, 2.2 ); // try 1/2.4 to 2.4
             if( 0.5 < blackBias.w ) // blacklevel
             {
                 vOut += blackBias.y * black;// offset color to get min average black

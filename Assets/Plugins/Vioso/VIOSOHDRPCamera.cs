@@ -41,37 +41,11 @@ public class VIOSOHDRPCamera : MonoBehaviour
     {
         _warperDict = new Dictionary<string, WarperSet>();
     }
-    public static void ScreenShot(string path)
-    {
-        Texture2D tex;
-        int w;
-        int h;
-        TextureFormat fmt;
-        if (null != RenderTexture.active)
-        {
-            w = RenderTexture.active.width;
-            h = RenderTexture.active.height;
-            fmt = TextureFormat.RGB24;
-        }
-        else
-        {
-            w = Screen.width;
-            h = Screen.height;
-            fmt = TextureFormat.RGB24;
-        }
-        tex = new Texture2D(w, h, fmt, false);
-
-        tex.ReadPixels(new Rect(0, 0, w, h), 0, 0);
-
-        byte[] io = tex.EncodeToPNG();
-        System.IO.File.WriteAllBytes(path, io);
-    }
 
     public void MyUpdate( ref Camera cam, ref WarperSet s )
     {
         if (s != null)
         {
-            /// this code needs to be moved to a per-frame callback like PreCull has been.
             Warper.VEC3 pos = new Warper.VEC3(0, 0, 0);
             Warper.VEC3 rot = new Warper.VEC3(0, 0, 0);
             Warper.MAT4X4 mVV = new Warper.MAT4X4(
@@ -128,10 +102,10 @@ public class VIOSOHDRPCamera : MonoBehaviour
                 s._ppMatrix = mVP.transpose; // update matrix for post process call later
 
                 // manipulate actual camera settings
-                //Quaternion q = mV.rotation;
                 //Vector3 p = mV.GetColumn(3);
                 mV = mV.transpose;
-                Quaternion q = mV.rotation;
+                //Quaternion q = mV.rotation;
+               Quaternion q = Quaternion.Inverse(mV.rotation);
                 Vector3 p = mV.GetColumn(3);
                 cam.transform.localRotation = s._orig_rot * q;
                 cam.transform.localPosition = s._orig_pos + p;
@@ -159,7 +133,7 @@ public class VIOSOHDRPCamera : MonoBehaviour
         WarperSet s;
         if (!_warperDict.TryGetValue(cam.name, out s))
         {
-            Debug.Log("VIOSOWarpBlendPP.Render(), new camera " + cam.name);
+            //Debug.Log("VIOSOWarpBlendPP.Render(), new camera " + cam.name);
             try
             {
                 // create a new warper with the name of the camera
@@ -274,8 +248,6 @@ public class VIOSOHDRPCamera : MonoBehaviour
         {
             Debug.Log(string.Format("Camera already initialized! Please make sure to name all VIOSO enabled cameras differently"));
         }
-
-        //MyUpdate( ref cam, ref s ); // ToDo: move that function call to a precull-like moment
     }
 
     private void OnDisable()
@@ -294,8 +266,6 @@ public class VIOSOHDRPCamera : MonoBehaviour
         WarperSet s;
         _warperDict.TryGetValue(camera.name, out s);
         MyUpdate(ref camera, ref s);
-
-        // does not work
-        Debug.Log("VIOSOHDRPCamera::onPrecull");
+        
     }
 }
