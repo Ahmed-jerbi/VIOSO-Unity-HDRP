@@ -16,4 +16,4 @@ Now You should be able to see the shader in play mode, as usual keep an eye on V
 - **Note**: for better synchronisation of effects (shadows/lighting..etc) between displays, you can work in a single view warping mode by using a 2D .vwf export.
 
 # Limitation
-- Please note that Unity does not properly sync some post processing effects like bloom, motion blur..etc between multiple displays.
+- Please note that Unity does not properly sync some post-processing effects between multiple displays like bloom, motion blur..etc. Therefore, make sure your application runs smoothly on all outputs first before adding warp & blend.
