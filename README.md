@@ -16,6 +16,7 @@ Scroll down until you find the Custom Post Process Orders section. Add VIOSOWarp
 
 Now You should be able to see the shader in play mode, as usual keep an eye on VIOSOWarpBlend.log file to monitor errors.
 - More info about VIOSO/Unity Integration: https://helpdesk.vioso.com/documentation/integrate-3d-engines/unity/
+- **Note**: Blending Gamma adjustment: if your scene uses gamma correction causing bright/dark overlaps, you can adjust the gamma value of the VIOSO shader by adding the variable ex. "gamma=0.45" to VIOSOWarpBlend.ini
 - **Note**: for better synchronisation of effects (shadows/lighting..etc) between displays, you can work in a single view warping mode by using a 2D .vwf export.
 
 # Limitation
